@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import Drink from './Drink'
 
 const INITIAL_STATE = {
 	term: '',
@@ -24,7 +25,7 @@ const Search = () => {
 		axios
 			.get(`https://thecocktaildb.com/api/json/v1/1/search.php?s=${term}`)
 			.then((response) => {
-				setResponseData(response)
+				setResponseData(response.data)
 			})
 			.catch((error) => {
 				console.log('Error', error)
@@ -46,7 +47,10 @@ const Search = () => {
 					value={values.term}
 				/>
 			</form>
-			<pre>{JSON.stringify(responseData)}</pre>
+			{responseData.drinks &&
+				responseData.drinks
+					.slice(0, 3)
+					.map((drink) => <Drink key={drink.idDrink} drink={drink} />)}
 		</>
 	)
 }
