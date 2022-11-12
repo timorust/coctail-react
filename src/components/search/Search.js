@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import Drink from './Drink'
 
@@ -10,6 +10,8 @@ const Search = () => {
 	const [values, setValeus] = useState(INITIAL_STATE)
 	const [responseData, setResponseData] = useState({})
 
+	const inputRef = useRef()
+
 	useEffect(() => {
 		const timerSearch = setTimeout(() => {
 			if (values.term) {
@@ -20,6 +22,10 @@ const Search = () => {
 			clearTimeout(timerSearch)
 		}
 	}, [values.term])
+
+	useEffect(() => {
+		inputRef.current.focus()
+	})
 
 	const handleChange = (event) => {
 		const { name, value } = event.target
@@ -40,22 +46,22 @@ const Search = () => {
 			.catch((error) => {
 				console.log('Error', error)
 			})
-		// .finally(() => {
-		// 	setValeus(INITIAL_STATE)
-		// })
+			.finally(() => {
+				setValeus(INITIAL_STATE)
+			})
 	}
 
 	return (
 		<>
 			<form onSubmit={handleSubmit} className='search'>
 				<input
+					ref={inputRef}
 					onChange={handleChange}
 					type='text'
 					name='term'
 					className='search-input'
 					placeholder='Search...'
 					value={values.term}
-					autoComplete='off'
 				/>
 			</form>
 			{responseData.drinks &&
